@@ -16,7 +16,7 @@ if OS_NAME == 'Windows' :
   elif os.environ['TOOLS_NAME'] == 'mingw' :
     EXPORT_DEF = ' "src/spine2d.def" '
 
-LIBS=['awtk', 'spine']
+LIBS=['awtk', 'spine', 'glad']
 if 'BUILD_SHARED' in os.environ and os.environ['BUILD_SHARED'] == 'True':
   LINKFLAGS=env['LINKFLAGS'] + EXPORT_DEF 
   env.SharedLibrary(os.path.join(BIN_DIR, 'spine2d'), SOURCES, LINKFLAGS=LINKFLAGS, LIBS=LIBS);

@@ -19,5 +19,5 @@ helper.add_cxxflags(APP_CXXFLAGS)
 helper.add_cpppath(APP_CPPPATH)
 helper.set_dll_def('src/spine2d.def').call(DefaultEnvironment)
 
-SConscriptFiles = ['3rd/SConscript', 'src/SConscript', 'demos/SConscript', 'tests/SConscript']
+SConscriptFiles = ['3rd/SConscript', 'src/SConscript', 'demos/SConscript']
 helper.SConscript(SConscriptFiles)

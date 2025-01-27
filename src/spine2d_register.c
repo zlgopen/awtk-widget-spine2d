@@ -25,8 +25,10 @@
 #include "spine2d_register.h"
 #include "base/widget_factory.h"
 #include "spine2d/spine2d.h"
+#include "base/opengl.h"
 
 ret_t spine2d_register(void) {
+	opengl_init();
   return widget_factory_register(widget_factory(), WIDGET_TYPE_SPINE2D, spine2d_create);
 }
 

@@ -211,15 +211,15 @@ void matrix_ortho_projection(float *matrix, float width, float height) {
 	float right = width;
 	float bottom = height;
 	float top = 0.0f;
-	float near = -1.0f;
-	float far = 1.0f;
+	float anear = -1.0f;
+	float afar = 1.0f;
 
 	matrix[0] = 2.0f / (right - left);
 	matrix[5] = 2.0f / (top - bottom);
-	matrix[10] = -2.0f / (far - near);
+	matrix[10] = -2.0f / (afar - anear);
 	matrix[12] = -(right + left) / (right - left);
 	matrix[13] = -(top + bottom) / (top - bottom);
-	matrix[14] = -(far + near) / (far - near);
+	matrix[14] = -(afar + anear) / (afar - anear);
 	matrix[15] = 1.0f;
 }
 
