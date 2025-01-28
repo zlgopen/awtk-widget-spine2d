@@ -2,7 +2,7 @@
 
 ### 创建骨骼动画控件
 
-atlas 指定纹理图集文件，skeleton 指定骨骼动画数据文件。可以是相对路径或绝对路径。atlas 中引用的图片文件需要和 skeleton 文件在同一目录下。
+atlas 指定纹理图集文件，skeleton 指定骨骼动画数据文件。数据文件和图片文件放在design/assets/default/raw/data目录下。
 
 scale_x 和 scale_y 指定缩放比例，根据实际情况调整。
 
@@ -13,8 +13,8 @@ action 指定动画名称，多个动画用逗号分隔。
 示例：
 
 ```xml
-  <spine2d name="spine2d" x="c" y="m" w="240" h="200" atlas="res/assets/default/raw/data/spineboy-pma.atlas"
-    skeleton="res/assets/default/raw/data/spineboy-pro.skel" scale_x="0.5" scale_y="0.5" 
+  <spine2d name="spine2d" x="c" y="m" w="240" h="200" atlas="spineboy-pma.atlas"
+    skeleton="spineboy-pro.skel" scale_x="0.5" scale_y="0.5" 
     action="portal,run" />
 ```
 

@@ -47,7 +47,7 @@ static ret_t spine2d_disptach_event(widget_t* widget, uint32_t type, TrackEntry*
   memset(&animator, 0x00, sizeof(animator));
   animator.widget = widget;
   widget_animator_set_name(&animator, name);
-  widget_animator_event_init(&e, type, widget, &animator); 
+  widget_animator_event_init(&e, type, widget, &animator);
   widget_dispatch(widget, (event_t*)&e);
   TKMEM_FREE(animator.name)
 
@@ -124,6 +124,8 @@ static ret_t skeleton_update_position_size(widget_t* widget, Skeleton* skeleton)
 
 static skeleton_info_t* skeleton_info_create(widget_t* widget) {
   spine2d_t* spine2d = SPINE2D(widget);
+  asset_info_t* asset_atlas = NULL;
+  asset_info_t* asset_skel = NULL;
   widget_t* wm = widget_get_window_manager(widget);
   return_value_if_fail(spine2d != NULL, NULL);
 
@@ -136,9 +138,14 @@ static skeleton_info_t* skeleton_info_create(widget_t* widget) {
   return_value_if_fail(info != NULL, NULL);
 
   GlTextureLoader textureLoader;
-  Atlas* atlas = new Atlas(atlas_file, &textureLoader);
+  asset_atlas = assets_manager_load(assets_manager(), ASSET_TYPE_DATA, atlas_file);
+  Atlas* atlas = new Atlas((const char*)asset_atlas->data, asset_atlas->size, "", &textureLoader);
+  asset_info_unref(asset_atlas);
+
   SkeletonBinary binary(atlas);
-  SkeletonData* skeletonData = binary.readSkeletonDataFile(skel_file);
+  asset_skel = assets_manager_load(assets_manager(), ASSET_TYPE_DATA, skel_file);
+  SkeletonData* skeletonData = binary.readSkeletonData(asset_skel->data, asset_skel->size);
+  asset_info_unref(asset_skel);
 
   Skeleton* skeleton = new Skeleton(skeletonData);
 
@@ -219,7 +226,12 @@ static ret_t spine2d_create_skeleton(widget_t* widget) {
   return_value_if_fail(spine2d != NULL, RET_BAD_PARAMS);
 
   Bone::setYDown(true);
-  spine2d->skeleton_info = skeleton_info_create(widget);
+  try {
+    spine2d->skeleton_info = skeleton_info_create(widget);
+  } catch (const std::exception& e) {
+    log_error("%s\n", e.what());
+  }
+
   skeleton_info_update((skeleton_info_t*)spine2d->skeleton_info);
   spine2d->timer_id = timer_add(spine2d_on_update_timer, widget, 16);
 
@@ -388,7 +400,7 @@ static ret_t spine2d_on_paint_self(widget_t* widget, canvas_t* c) {
   vgcanvas_t* vg = canvas_get_vgcanvas(c);
   return_value_if_fail(widget != NULL && spine2d != NULL, RET_BAD_PARAMS);
   return_value_if_fail(vg != NULL, RET_BAD_PARAMS);
-  
+
   if (spine2d->skeleton_info == NULL) {
     if (spine2d->atlas != NULL && spine2d->skeleton != NULL) {
       spine2d_create_skeleton(widget);
@@ -425,14 +437,9 @@ static ret_t spine2d_on_event(widget_t* widget, event_t* e) {
   return RET_OK;
 }
 
-const char* s_spine2d_properties[] = {SPINE2D_PROP_ATLAS,
-                                      SPINE2D_PROP_SKELETON,
-                                      SPINE2D_PROP_ACTION,
-                                      SPINE2D_PROP_SCALE_X,
-                                      SPINE2D_PROP_SCALE_Y,
-                                      SPINE2D_PROP_SCALE_TIME,
-                                      SPINE2D_PROP_LOOP,
-                                      NULL};
+const char* s_spine2d_properties[] = {
+    SPINE2D_PROP_ATLAS,   SPINE2D_PROP_SKELETON,   SPINE2D_PROP_ACTION, SPINE2D_PROP_SCALE_X,
+    SPINE2D_PROP_SCALE_Y, SPINE2D_PROP_SCALE_TIME, SPINE2D_PROP_LOOP,   NULL};
 
 TK_DECL_VTABLE(spine2d) = {.size = sizeof(spine2d_t),
                            .type = WIDGET_TYPE_SPINE2D,

@@ -1,7 +1,7 @@
 <window theme="main" >
   <label x="c" y="10" w="200" h="30" tr_text="title" />
-  <spine2d name="spine2d" x="c" y="m" w="240" h="200" atlas="res/assets/default/raw/data/spineboy-pma.atlas"
-    skeleton="res/assets/default/raw/data/spineboy-pro.skel" scale_x="0.5" scale_y="0.5" 
+  <spine2d name="spine2d" x="c" y="m" w="240" h="200" atlas="spineboy-pma.atlas"
+    skeleton="spineboy-pro.skel" scale_x="0.5" scale_y="0.5" 
     action="portal,run"
     on:anim_start="print('start')"
     on:anim_once="print('once')"
