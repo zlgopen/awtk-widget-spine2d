@@ -108,6 +108,13 @@ shader_t shader_create(const char* vertex_shader, const char* fragment_shader) {
   }
 
   program = glCreateProgram();
+#if defined(WITH_GPU_GLES2) || defined(WITH_GPU_GLES3)
+  glBindAttribLocation(program, 0, "aPos");
+  glBindAttribLocation(program, 1, "aLightColor");
+  glBindAttribLocation(program, 2, "aTexCoord");
+  glBindAttribLocation(program, 3, "aDarkColor");
+#endif
+
   glAttachShader(program, vertex_shader_id);
   glAttachShader(program, fragment_shader_id);
   glLinkProgram(program);
