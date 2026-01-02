@@ -49,7 +49,7 @@ static ret_t spine2d_disptach_event(widget_t* widget, uint32_t type, TrackEntry*
   widget_animator_set_name(&animator, name);
   widget_animator_event_init(&e, type, widget, &animator);
   widget_dispatch(widget, (event_t*)&e);
-  TKMEM_FREE(animator.name)
+  TKMEM_FREE(animator.name);
 
   return RET_OK;
 }
@@ -113,7 +113,7 @@ static ret_t skeleton_update_position_size(widget_t* widget, Skeleton* skeleton)
   float x = p.x + widget->w / 2;
   float y = p.y + widget->h;
   float scale_x = (float)(spine2d->scale_x * widget->w) / (float)(wm->w);
-  float scale_y = (float)(spine2d->scale_x * widget->h) / (float)(wm->h);
+  float scale_y = (float)(spine2d->scale_y * widget->h) / (float)(wm->h);
 
   skeleton->setPosition(x, y);
   skeleton->setScaleX(scale_x);
